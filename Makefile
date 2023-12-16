@@ -19,12 +19,14 @@ NAME		=	philo
 
 CC			=	cc
 
-CFLAGS		=	-g -Wall -Wextra -Werror
+CFLAGS		=	-g -pthread -Wall -Wextra -Werror
 
 INCLUDE		=	-I.
 
 SRCS		=	mandatory/src/philo.c			\
 				mandatory/src/utils.c			\
+				mandatory/src/init.c			\
+				mandatory/src/errors.c			\
 
 OBJS        =    $(addprefix obj/, $(SRCS:.c=.o))
 OBJS_DIRS    =    $(sort $(dir $(OBJS))) 

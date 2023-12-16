@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ycontre <ycontre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 14:19:19 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/15 14:43:40 by ycontre          ###   ########.fr       */
+/*   Updated: 2023/12/16 16:10:19 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,4 +47,27 @@ int	ft_atoi(char *str)
 		i++;
 	}
 	return (final_result * sign);
+}
+
+void clear_data(t_glob *glob)
+{
+	int	i;
+
+	if (glob->philo)
+		free(glob->philo);
+	if (glob->forks)
+		free(glob->forks);
+	i = -1;
+	while (++i < glob->philo_num)
+	{
+		// pthread_mutex_destroy(&(glob->forks[i]));
+		// pthread_mutex_destroy(&(glob->philo[i].lock));
+	}
+}
+
+void error_exit(t_glob *glob)
+{
+	clear_data(glob);
+	ft_putstr(2, "An error happenned.\n");
+	exit(EXIT_FAILURE);
 }
