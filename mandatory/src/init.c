@@ -69,6 +69,7 @@ t_glob init_glob(char **argv, int argc)
 	else
 		glob.must_eat = -1;
 	glob.fork_num = glob.philo_num;
+	glob.dead = 0;
 	init_philo(&glob);
 	init_forks(&glob);
 	return (glob);
