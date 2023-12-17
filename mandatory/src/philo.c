@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:53:05 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/17 15:03:30 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/17 15:22:54 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,18 @@ void calcul_philo(t_glob *glob)
 	}
 }
 
+void	one_philo(t_glob *glob)
+{
+	glob->start_time = get_time(glob);
+	if (pthread_create(&(glob->philo[0].routine), NULL, &routine, &glob->philo[0]))
+			error_exit(glob);
+	pthread_detach(glob->philo[0].routine);
+	while (glob->dead == 0)
+		ft_usleep(1, glob);
+	clear_data(glob);
+	exit(EXIT_SUCCESS);
+}
+
 int main(int argc, char **argv)
 {
 	t_glob *glob;
@@ -128,6 +140,8 @@ int main(int argc, char **argv)
 	if (ft_handle_errors(argc, argv) == 0)
 		return (0);
 	glob = init_glob(argv, argc);
+	if (glob->philo_num == 1)
+		one_philo(glob);
 	calcul_philo(glob);
 	clear_data(glob);
 	return (0);
