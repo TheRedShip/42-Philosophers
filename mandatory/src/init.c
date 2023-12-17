@@ -46,32 +46,35 @@ void	init_philo(t_glob *glob)
 	while (i < glob->philo_num)
 	{
 		glob->philo[i].glob = glob;
-		glob->philo[i].id = i;
+		glob->philo[i].id = i + 1;
 		glob->philo[i].time_to_die = glob->time_to_die;
 		glob->philo[i].eaten_time = 0;
+		glob->philo[i].last_eaten = 0;
 		glob->philo[i].status = 0;
-
 		pthread_mutex_init(&(glob->philo[i].lock), NULL);
 		i++;
 	}
 }
 
-t_glob init_glob(char **argv, int argc)
+t_glob *init_glob(char **argv, int argc)
 {
-	t_glob glob;
+	t_glob *glob;
 
-	glob.philo_num = ft_atoi(argv[1]);
-	glob.time_to_die = ft_atoi(argv[2]);
-	glob.time_to_eat = ft_atoi(argv[3]);
-	glob.time_to_sleep = ft_atoi(argv[4]);
+	glob = malloc(sizeof(t_glob));
+	if (!glob)
+		exit(EXIT_FAILURE);
+	glob->philo_num = ft_atoi(argv[1]);
+	glob->time_to_die = ft_atoi(argv[2]);
+	glob->time_to_eat = ft_atoi(argv[3]);
+	glob->time_to_sleep = ft_atoi(argv[4]);
 	if (argc == 6)
-		glob.must_eat = ft_atoi(argv[5]);
+		glob->must_eat = ft_atoi(argv[5]);
 	else
-		glob.must_eat = -1;
-	glob.fork_num = glob.philo_num;
-	glob.dead = 0;
-	init_philo(&glob);
-	init_forks(&glob);
+		glob->must_eat = -1;
+	glob->fork_num = glob->philo_num;
+	glob->dead = 0;
+	pthread_mutex_init(&(glob->lock), NULL);
+	init_philo(glob);
+	init_forks(glob);
 	return (glob);
-
 }
