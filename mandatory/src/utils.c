@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 14:19:19 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/17 13:39:48 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/18 14:31:39 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,16 +53,18 @@ void clear_data(t_glob *glob)
 {
 	int	i;
 
-	if (glob && glob->philo)
-		free(glob->philo);
-	if (glob && glob->forks)
-		free(glob->forks);
 	i = -1;
 	while (++i < glob->philo_num)
 	{
 		// pthread_mutex_destroy(&(glob->forks[i]));
 		// pthread_mutex_destroy(&(glob->philo[i].lock));
 	}
+	// pthread_mutex_destroy(&(glob->lock));
+
+	if (glob && glob->philo)
+		free(glob->philo);
+	if (glob && glob->forks)
+		free(glob->forks);
 	if (glob)
 		free(glob);
 }
