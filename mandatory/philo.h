@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:52:45 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/17 14:37:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/18 16:16:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ typedef struct s_glob {
 	int				time_to_eat;
 	int				time_to_sleep;
 	int				must_eat;
+	int				total_eaten;
 	int				fork_num;
 	u_int64_t		start_time;
 	struct s_philo	*philo;
@@ -37,7 +38,6 @@ typedef struct s_philo {
 	int				id;
 	int				status;
 	int				eaten_time;
-	u_int64_t		last_eaten;
 	u_int64_t		time_to_die;
 	pthread_t		routine;
 	pthread_t		supervisor;

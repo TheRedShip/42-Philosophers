@@ -49,7 +49,6 @@ void	init_philo(t_glob *glob)
 		glob->philo[i].id = i + 1;
 		glob->philo[i].time_to_die = glob->time_to_die;
 		glob->philo[i].eaten_time = 0;
-		glob->philo[i].last_eaten = 0;
 		glob->philo[i].status = 0;
 		pthread_mutex_init(&(glob->philo[i].lock), NULL);
 		i++;
@@ -71,6 +70,7 @@ t_glob *init_glob(char **argv, int argc)
 		glob->must_eat = ft_atoi(argv[5]);
 	else
 		glob->must_eat = -1;
+	glob->total_eaten = 0;
 	glob->fork_num = glob->philo_num;
 	glob->dead = 0;
 	pthread_mutex_init(&(glob->lock), NULL);
