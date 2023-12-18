@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 14:19:19 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/18 14:31:39 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/18 16:07:08 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ void clear_data(t_glob *glob)
 
 void error_exit(t_glob *glob)
 {
+	pthread_mutex_lock(&(glob->lock)); 
 	clear_data(glob);
 	ft_putstr(2, "An error happenned.\n");
 	exit(EXIT_FAILURE);

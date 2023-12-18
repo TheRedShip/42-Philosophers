@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:53:05 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/18 14:53:06 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/18 16:06:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,13 +49,34 @@ void do_eat(t_philo *philo)
 	philo->status = 1;
 	philo->time_to_die = get_time(philo->glob) + philo->glob->time_to_die;
 	print_message(philo, "is eating");
-	philo->eaten_time = get_time(philo->glob);
+	philo->eaten_time++;
 	ft_usleep(philo->glob->time_to_eat, philo->glob);
 	philo->status = 2;
 	pthread_mutex_unlock(&philo->lock);
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
+
+
+// void	*monitor(void *glob_pointer)
+// {
+// 	t_glob	*glob;
+
+// 	glob = (t_glob *) glob_pointer;
+// 	pthread_mutex_lock(&glob->lock);
+// 	printf("glob val: %d", glob->dead);
+// 	while (glob->dead == 0)
+// 	{
+// 		pthread_mutex_unlock(&glob->lock);
+// 		pthread_mutex_lock(&glob->lock);
+// 		if (glob->total_eaten >= glob->philo_num)
+// 			glob->dead = 1;
+// 		pthread_mutex_lock(&glob->lock);
+// 	}
+// 	pthread_mutex_unlock(&glob->lock);
+// 	return ((void *)0);
+// }
+
 void	*supervisor(void *philo_pointer)
 {
 	t_philo *philo;
@@ -66,6 +87,7 @@ void	*supervisor(void *philo_pointer)
 	{
 		pthread_mutex_unlock(&(philo->glob->lock));
 		pthread_mutex_lock(&(philo->lock));
+
 		if (get_time(philo->glob) >= philo->time_to_die && philo->status != 1)
 		{
 			pthread_mutex_lock(&(philo->glob->lock));
@@ -117,9 +139,15 @@ void calcul_philo(t_glob *glob)
 	i = 0;
 	while (i < glob->philo_num)
 	{
+		pthread_mutex_lock(&(glob->lock));
+		pthread_mutex_lock(&(glob->philo[i].lock));
 		if (pthread_create(&(glob->philo[i].routine), NULL, &routine, &glob->philo[i]))
 			error_exit(glob);
-		// ft_usleep(3, glob);
+		pthread_mutex_unlock(&(glob->lock));
+		pthread_mutex_unlock(&(glob->philo[i].lock));
+
+		
+		ft_usleep(1, glob);
 		i++;
 	}
 	i = 0;
