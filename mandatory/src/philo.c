@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:53:05 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/18 16:33:27 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/21 17:01:38 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -168,6 +168,8 @@ void calcul_philo(t_glob *glob)
 			error_exit(glob);
 		i++;
 	}
+	if (glob->must_eat > 0 && pthread_join(t, NULL))
+		error_exit(glob);
 }
 
 void	one_philo(t_glob *glob)
