@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ycontre <ycontre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:53:05 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/21 17:01:38 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/22 12:35:30 by ycontre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,9 @@ int	ft_usleep(useconds_t time, t_glob *glob)
 
 void do_eat(t_philo *philo)
 {
+	pthread_mutex_lock(&philo->lock);
 	philo->status = 0;
+	pthread_mutex_unlock(&philo->lock);
 	pthread_mutex_lock(philo->right_fork);
 	print_message(philo, "has taken a fork");
 	pthread_mutex_lock(philo->left_fork);
