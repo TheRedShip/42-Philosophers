@@ -12,45 +12,66 @@
 
 #include "../philo.h"
 
-int	init_forks(t_glob *glob)
+void init_semaphore(t_glob *glob)
 {
-	int	i;
+	sem_t *sem;
+	
+	sem_unlink("died");
+	sem_unlink("forks");
 
-	glob->forks = malloc(sizeof(pthread_mutex_t) * glob->fork_num);
-	if (!glob->forks)
+	sem = sem_open("died", O_CREAT, 0777, 0);
+	if (sem == SEM_FAILED)
 		error_exit(glob);
-	i = -1;
-	while (++i < glob->philo_num)
-		pthread_mutex_init(&(glob->forks[i]), NULL);
-	i = 0;
-	glob->philo[0].left_fork = &glob->forks[0];
-	glob->philo[0].right_fork = &glob->forks[glob->philo_num - 1];
-	i = 1;
-	while (i < glob->philo_num)
-	{
-		glob->philo[i].left_fork = &glob->forks[i];
-		glob->philo[i].right_fork = &glob->forks[i - 1];
-		i++;
-	}
-	return (0);
+	sem_close(sem);
+	sem = sem_open("forks", O_CREAT, 0777, glob->philo_num);
+	if (sem == SEM_FAILED)
+		error_exit(glob);
+	sem_close(sem);
 }
 
-void	init_philo(t_glob *glob)
+int	born_philo(t_philo philo)
+{
+	int	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		philo.last_meal = -1;
+		philo.eaten_time = 0;
+		philo.status = 0;
+		// printf("Philosopher %d is born at %ld\n", philo.id, philo.start_time);
+		calcul_philo(philo);
+		exit(0);
+	}
+	return (pid);
+}
+
+void init_philos(t_glob *glob)
 {
 	int	i;
+	t_philo	philo;
+	u_int64_t	start_time;
 
-	glob->philo = malloc(sizeof(t_philo) * glob->philo_num);
-	if (!glob->philo)
+	glob->pids = malloc(sizeof(int) * (glob->philo_num + 1));
+	if (!glob->pids)
 		error_exit(glob);
+	glob->pids[glob->philo_num] = 0;
 	i = 0;
+	start_time = get_time();
 	while (i < glob->philo_num)
 	{
-		glob->philo[i].glob = glob;
-		glob->philo[i].id = i + 1;
-		glob->philo[i].time_to_die = glob->time_to_die;
-		glob->philo[i].eaten_time = 0;
-		glob->philo[i].status = 0;
-		pthread_mutex_init(&(glob->philo[i].lock), NULL);
+		philo.id = i + 1;
+		philo.start_time = start_time;
+		philo.time_to_eat = glob->time_to_eat;
+		philo.time_to_die = glob->time_to_die;
+		philo.time_to_sleep = glob->time_to_sleep;
+		glob->pids[i] = born_philo(philo);
+		if (glob->pids[i] == -1)
+		{
+			glob->pids[i] = 0;
+			error_exit(glob);
+		}
+		ft_usleep(1);
 		i++;
 	}
 }
@@ -70,11 +91,7 @@ t_glob *init_glob(char **argv, int argc)
 		glob->must_eat = ft_atoi(argv[5]);
 	else
 		glob->must_eat = -1;
-	glob->total_eaten = 0;
-	glob->fork_num = glob->philo_num;
-	glob->dead = 0;
-	pthread_mutex_init(&(glob->lock), NULL);
-	init_philo(glob);
-	init_forks(glob);
+	init_semaphore(glob);
+	init_philos(glob);
 	return (glob);
 }
