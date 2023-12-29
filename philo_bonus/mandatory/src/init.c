@@ -17,13 +17,23 @@ void init_semaphore(t_glob *glob)
 	sem_t *sem;
 	
 	sem_unlink("died");
+	sem_unlink("meal");
 	sem_unlink("forks");
+	sem_unlink("print");
 
 	sem = sem_open("died", O_CREAT, 0777, 0);
 	if (sem == SEM_FAILED)
 		error_exit(glob);
 	sem_close(sem);
 	sem = sem_open("forks", O_CREAT, 0777, glob->philo_num);
+	if (sem == SEM_FAILED)
+		error_exit(glob);
+	sem_close(sem);
+	sem = sem_open("print", O_CREAT, 0777, 1);
+	if (sem == SEM_FAILED)
+		error_exit(glob);
+	sem_close(sem);
+	sem = sem_open("meal", O_CREAT, 0777, 0);
 	if (sem == SEM_FAILED)
 		error_exit(glob);
 	sem_close(sem);
@@ -36,7 +46,7 @@ int	born_philo(t_philo philo)
 	pid = fork();
 	if (pid == 0)
 	{
-		philo.last_meal = -1;
+		philo.last_meal = philo.start_time;
 		philo.eaten_time = 0;
 		philo.status = 0;
 		// printf("Philosopher %d is born at %ld\n", philo.id, philo.start_time);
@@ -65,6 +75,7 @@ void init_philos(t_glob *glob)
 		philo.time_to_eat = glob->time_to_eat;
 		philo.time_to_die = glob->time_to_die;
 		philo.time_to_sleep = glob->time_to_sleep;
+		philo.must_eat = glob->must_eat;
 		glob->pids[i] = born_philo(philo);
 		if (glob->pids[i] == -1)
 		{

@@ -6,7 +6,7 @@
 /*   By: ycontre <ycontre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:53:05 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/22 12:35:30 by ycontre          ###   ########.fr       */
+/*   Updated: 2023/12/22 14:53:01 by ycontre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void do_eat(t_philo *philo)
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
-
 
 void	*monitor(void *glob_pointer)
 {

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ycontre <ycontre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 14:19:19 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/22 19:05:21 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/29 14:20:24 by ycontre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,21 @@ int	ft_atoi(char *str)
 	return (final_result * sign);
 }
 
-void clear_data(t_glob *glob)
+void kill_pid(t_glob *glob)
 {
-	int	i;
+	int i;
 
 	i = 0;
-	while (glob && glob->pids && glob->pids[i] != 0)
+	while (i < glob->philo_num)
 	{
 		kill(glob->pids[i], SIGKILL);
-		glob->pids[i] = 0;
 		i++;
 	}
+}
+
+void clear_data(t_glob *glob)
+{
+	kill_pid(glob);
 	if (glob && glob->pids)
 		free(glob->pids);
 	if (glob)

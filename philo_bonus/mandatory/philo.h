@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: ycontre <ycontre@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:52:45 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/22 19:08:52 by marvin           ###   ########.fr       */
+/*   Updated: 2023/12/29 14:20:36 by ycontre          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_philo {
 	int				id;
 	int				status;
 	u_int64_t		last_meal;
+	int				must_eat;
 	int				eaten_time;
 	int				time_to_eat;
 	int				time_to_die;
@@ -51,6 +52,7 @@ void	ft_putstr(int fd, char *str);
 int		ft_atoi(char *str);
 void	error_exit(t_glob *glob);
 void	clear_data(t_glob *glob);
+void kill_pid(t_glob *glob);
 
 u_int64_t	get_time();
 int	ft_usleep(useconds_t time);
@@ -62,5 +64,6 @@ int		ft_handle_errors(int argc, char **argv);
 void calcul_philo(t_philo philo);
 
 void *wait_any_death(void *glob);
+void *waitate(void *glob_ptr);
 
 #endif
