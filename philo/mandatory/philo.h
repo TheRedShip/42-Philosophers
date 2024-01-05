@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:52:45 by ycontre           #+#    #+#             */
-/*   Updated: 2024/01/05 19:05:14 by marvin           ###   ########.fr       */
+/*   Updated: 2024/01/05 19:57:46 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,8 +55,8 @@ void		error_exit(t_glob *glob);
 void		clear_data(t_glob *glob);
 void		print_message(t_philo *philo, char *message, int dead);
 
-u_int64_t	get_time(t_glob *glob);
-int			ft_usleep(useconds_t time, t_glob *glob);
+u_int64_t	get_time(void);
+int			ft_usleep(useconds_t time);
 
 t_glob		*init_glob(char **argv, int argc);
 

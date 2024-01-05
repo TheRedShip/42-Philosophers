@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 14:19:19 by ycontre           #+#    #+#             */
-/*   Updated: 2024/01/05 19:04:52 by marvin           ###   ########.fr       */
+/*   Updated: 2024/01/05 19:58:34 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	print_message(t_philo *p, char *message, int dead)
 {
 	pthread_mutex_lock(&(p->glob->lock));
 	if (p->glob->dead == 0)
-		printf("%ld %d %s\n", get_time(p->glob) - p->glob->start_time, \
+		printf("%ld %d %s\n", get_time() - p->glob->start_time, \
 			p->id, message);
 	if (dead == 1)
 		p->glob->dead = 1;

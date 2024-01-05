@@ -12,21 +12,20 @@
 
 #include "../philo.h"
 
-int	ft_usleep(useconds_t time, t_glob *glob)
+int	ft_usleep(useconds_t time)
 {
 	u_int64_t	start;
 
-	start = get_time(glob);
-	while ((get_time(glob) - start) < time)
+	start = get_time();
+	while ((get_time() - start) < time)
 		usleep(time / 10);
 	return (0);
 }
 
-u_int64_t	get_time(t_glob *glob)
+u_int64_t	get_time(void)
 {
 	struct timeval	tv;
 
-	if (gettimeofday(&tv, NULL))
-		error_exit(glob);
+	gettimeofday(&tv, NULL);
 	return ((tv.tv_sec * (u_int64_t)1000) + (tv.tv_usec / 1000));
 }

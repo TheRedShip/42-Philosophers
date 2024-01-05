@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:53:05 by ycontre           #+#    #+#             */
-/*   Updated: 2024/01/05 18:53:58 by marvin           ###   ########.fr       */
+/*   Updated: 2024/01/05 19:57:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	calcul_philo(t_glob *g)
 	pthread_t	t;
 	int			i;
 
-	g->start_time = get_time(g);
+	g->start_time = get_time();
 	if (g->must_eat > 0 && pthread_create(&t, NULL, &monitor, g))
 		return (error_exit(g));
 	i = -1;
@@ -29,7 +29,7 @@ void	calcul_philo(t_glob *g)
 			error_exit(g);
 		pthread_mutex_unlock(&(g->lock));
 		pthread_mutex_unlock(&(g->philo[i].lock));
-		ft_usleep(1, g);
+		ft_usleep(1);
 	}
 	i = -1;
 	while (++i < g->philo_num)
@@ -43,7 +43,7 @@ void	calcul_philo(t_glob *g)
 
 void	one_philo(t_glob *glob)
 {
-	glob->start_time = get_time(glob);
+	glob->start_time = get_time();
 	if (pthread_create(&(glob->philo[0].routine), NULL, \
 		&routine, &glob->philo[0]))
 		error_exit(glob);
@@ -52,7 +52,7 @@ void	one_philo(t_glob *glob)
 	while (glob->dead == 0)
 	{
 		pthread_mutex_unlock(&(glob->lock));
-		ft_usleep(1, glob);
+		ft_usleep(1);
 		pthread_mutex_lock(&(glob->lock));
 	}
 	pthread_mutex_unlock(&(glob->lock));
