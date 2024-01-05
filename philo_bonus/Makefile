@@ -28,6 +28,7 @@ SRCS		=	mandatory/src/philo.c			\
 				mandatory/src/init.c			\
 				mandatory/src/errors.c			\
 				mandatory/src/wait_conditions.c	\
+				mandatory/src/time.c	\
 
 OBJS        =    $(addprefix obj/, $(SRCS:.c=.o))
 OBJS_DIRS    =    $(sort $(dir $(OBJS))) 

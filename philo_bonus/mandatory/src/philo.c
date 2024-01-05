@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   philo.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ycontre <ycontre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:53:05 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/29 16:12:20 by ycontre          ###   ########.fr       */
+/*   Updated: 2024/01/05 20:02:02 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void print_message(t_philo *philo, char *message, int dead)
+void	print_message(t_philo *philo, char *message, int dead)
 {
-	sem_t *sem;
+	sem_t	*sem;
 
 	sem = sem_open("print", O_RDWR);
 	sem_wait(sem);
@@ -24,23 +24,17 @@ void print_message(t_philo *philo, char *message, int dead)
 	sem_close(sem);
 }
 
-void try_cycle(t_philo *philo)
+void	try_cycle(t_philo *philo)
 {
-	int	i;
-	sem_t *sem;
-	sem_t *sem_eat;
+	sem_t	*sem;
+	sem_t	*sem_eat;
 
 	sem = sem_open("forks", O_RDWR);
-	i = 0;
-	philo->status = 0;
-	while (i < 2)
-	{
-		sem_wait(sem);
-		print_message(philo, "has taken a fork", 0);
-		i++;
-	}
-	philo->eaten_time++;
-	if (philo->eaten_time == philo->must_eat)
+	sem_wait(sem);
+	print_message(philo, "has taken a fork", 0);
+	sem_wait(sem);
+	print_message(philo, "has taken a fork", 0);
+	if (philo->eaten_time++ && philo->eaten_time == philo->must_eat)
 	{
 		sem_eat = sem_open("meal", O_RDWR);
 		sem_post(sem_eat);
@@ -50,7 +44,7 @@ void try_cycle(t_philo *philo)
 	philo->status = 1;
 	print_message(philo, "is eating", 0);
 	ft_usleep(philo->time_to_eat);
-	philo->status = 2;
+	philo->status = 0;
 	sem_post(sem);
 	sem_post(sem);
 	print_message(philo, "is sleeping", 0);
@@ -59,15 +53,16 @@ void try_cycle(t_philo *philo)
 	sem_close(sem);
 }
 
-void *verify_philo_dead(void *philo_ptr)
+void	*verify_philo_dead(void *philo_ptr)
 {
-	sem_t *sem;
-	t_philo *philo;
+	sem_t	*sem;
+	t_philo	*philo;
 
 	philo = (t_philo *)philo_ptr;
 	while (1)
 	{
-		if (get_time() >= philo->last_meal + philo->time_to_die && philo->status != 1)
+		if (get_time() >= philo->last_meal + philo->time_to_die \
+			&& philo->status != 1)
 		{
 			print_message(philo, "died", 1);
 			sem = sem_open("died", O_RDWR);
@@ -79,10 +74,10 @@ void *verify_philo_dead(void *philo_ptr)
 	return (NULL);
 }
 
-void calcul_philo(t_philo philo)
+void	calcul_philo(t_philo philo)
 {
-	pthread_t death;
-	int	i;
+	int			i;
+	pthread_t	death;
 
 	pthread_create(&death, NULL, &verify_philo_dead, (void *)&philo);
 	pthread_detach(death);
@@ -94,42 +89,9 @@ void calcul_philo(t_philo philo)
 	}
 }
 
-void wait_end_condition(t_glob *glob)
+int	main(int argc, char **argv)
 {
-	int	i;
-	sem_t *sem;
-	sem_t *sem_death;
-	pthread_t waitdeath;
-	pthread_t eat_enough;
-
-	pthread_create(&waitdeath, NULL, &wait_any_death, (void *)glob);
-	pthread_create(&eat_enough, NULL, &waitate, (void *)glob);
-
-	i = 0;
-	while (glob->pids[i] != 0)
-	{
-		waitpid(glob->pids[i], NULL, 0);
-		i++;
-	}
-	i = 0;
-	sem_death = sem_open("died", O_RDWR);
-	sem_post(sem_death);
-	sem_close(sem_death);
-	
-	sem = sem_open("meal", O_RDWR);
-	while (glob->pids[i] != 0)
-	{
-		sem_post(sem);
-		i++;
-	}
-	sem_close(sem);
-	pthread_join(waitdeath, NULL);
-	pthread_join(eat_enough, NULL);
-}
-
-int main(int argc, char **argv)
-{
-	t_glob *glob;
+	t_glob	*glob;
 
 	if (ft_handle_errors(argc, argv) == 0)
 		return (0);

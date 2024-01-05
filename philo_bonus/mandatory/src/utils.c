@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ycontre <ycontre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 14:19:19 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/29 14:20:24 by ycontre          ###   ########.fr       */
+/*   Updated: 2024/01/05 20:05:53 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void ft_putstr(int fd, char *str)
+void	ft_putstr(int fd, char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -49,19 +49,19 @@ int	ft_atoi(char *str)
 	return (final_result * sign);
 }
 
-void kill_pid(t_glob *glob)
+void	kill_pid(t_glob *glob)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while (i < glob->philo_num)
+	while (glob->pids[i] > 0)
 	{
 		kill(glob->pids[i], SIGKILL);
 		i++;
 	}
 }
 
-void clear_data(t_glob *glob)
+void	clear_data(t_glob *glob)
 {
 	kill_pid(glob);
 	if (glob && glob->pids)
@@ -70,26 +70,9 @@ void clear_data(t_glob *glob)
 		free(glob);
 }
 
-void error_exit(t_glob *glob)
+void	error_exit(t_glob *glob)
 {
 	clear_data(glob);
 	ft_putstr(2, "An error happenned.\n");
 	exit(EXIT_FAILURE);
-}
-
-u_int64_t	get_time()
-{
-	struct timeval	tv;
-	
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * (u_int64_t)1000) + (tv.tv_usec / 1000));
-}
-
-int	ft_usleep(useconds_t time)
-{
-	u_int64_t	start;
-	start = get_time();
-	while ((get_time() - start) < time)
-		usleep(time / 10);
-	return(0);
 }

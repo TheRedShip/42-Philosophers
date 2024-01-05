@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ycontre <ycontre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:52:45 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/29 14:20:36 by ycontre          ###   ########.fr       */
+/*   Updated: 2024/01/05 20:00:43 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@
 # include <signal.h>
 # include <pthread.h>
 
-typedef struct s_glob {
+typedef struct s_glob
+{
 	int				philo_num;
 	int				time_to_die;
 	int				time_to_eat;
@@ -36,7 +37,8 @@ typedef struct s_glob {
 	int				*pids;
 }	t_glob;
 
-typedef struct s_philo {
+typedef struct s_philo
+{
 	int				id;
 	int				status;
 	u_int64_t		last_meal;
@@ -48,22 +50,23 @@ typedef struct s_philo {
 	u_int64_t		start_time;
 }	t_philo;
 
-void	ft_putstr(int fd, char *str);
-int		ft_atoi(char *str);
-void	error_exit(t_glob *glob);
-void	clear_data(t_glob *glob);
-void kill_pid(t_glob *glob);
+void		ft_putstr(int fd, char *str);
+int			ft_atoi(char *str);
+void		error_exit(t_glob *glob);
+void		clear_data(t_glob *glob);
+void		kill_pid(t_glob *glob);
 
-u_int64_t	get_time();
-int	ft_usleep(useconds_t time);
+u_int64_t	get_time(void);
+int			ft_usleep(useconds_t time);
 
-t_glob	*init_glob(char **argv, int argc);
+t_glob		*init_glob(char **argv, int argc);
 
-int		ft_handle_errors(int argc, char **argv);
+int			ft_handle_errors(int argc, char **argv);
 
-void calcul_philo(t_philo philo);
+void		calcul_philo(t_philo philo);
 
-void *wait_any_death(void *glob);
-void *waitate(void *glob_ptr);
+void		wait_end_condition(t_glob *glob);
+void		*wait_any_death(void *glob);
+void		*waitate(void *glob_ptr);
 
 #endif

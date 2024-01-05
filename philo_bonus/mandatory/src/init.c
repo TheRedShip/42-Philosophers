@@ -12,15 +12,14 @@
 
 #include "../philo.h"
 
-void init_semaphore(t_glob *glob)
+void	init_semaphore(t_glob *glob)
 {
-	sem_t *sem;
-	
+	sem_t	*sem;
+
 	sem_unlink("died");
 	sem_unlink("meal");
 	sem_unlink("forks");
 	sem_unlink("print");
-
 	sem = sem_open("died", O_CREAT, 0777, 0);
 	if (sem == SEM_FAILED)
 		error_exit(glob);
@@ -49,17 +48,16 @@ int	born_philo(t_philo philo)
 		philo.last_meal = philo.start_time;
 		philo.eaten_time = 0;
 		philo.status = 0;
-		// printf("Philosopher %d is born at %ld\n", philo.id, philo.start_time);
 		calcul_philo(philo);
 		exit(0);
 	}
 	return (pid);
 }
 
-void init_philos(t_glob *glob)
+void	init_philos(t_glob *glob)
 {
-	int	i;
-	t_philo	philo;
+	int			i;
+	t_philo		philo;
 	u_int64_t	start_time;
 
 	glob->pids = malloc(sizeof(int) * (glob->philo_num + 1));
@@ -78,18 +76,15 @@ void init_philos(t_glob *glob)
 		philo.must_eat = glob->must_eat;
 		glob->pids[i] = born_philo(philo);
 		if (glob->pids[i] == -1)
-		{
-			glob->pids[i] = 0;
 			error_exit(glob);
-		}
 		ft_usleep(1);
 		i++;
 	}
 }
 
-t_glob *init_glob(char **argv, int argc)
+t_glob	*init_glob(char **argv, int argc)
 {
-	t_glob *glob;
+	t_glob	*glob;
 
 	glob = malloc(sizeof(t_glob));
 	if (!glob)
