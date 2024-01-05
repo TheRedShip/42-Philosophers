@@ -55,9 +55,9 @@ void	init_philo(t_glob *glob)
 	}
 }
 
-t_glob *init_glob(char **argv, int argc)
+t_glob	*init_glob(char **argv, int argc)
 {
-	t_glob *glob;
+	t_glob	*glob;
 
 	glob = malloc(sizeof(t_glob));
 	if (!glob)

@@ -6,7 +6,7 @@
 /*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 13:52:45 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/18 16:16:27 by marvin           ###   ########.fr       */
+/*   Updated: 2024/01/05 19:05:14 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@
 # include <stdio.h>
 # include <sys/time.h>
 
-typedef struct s_glob {
+typedef struct s_glob
+{
 	int				philo_num;
 	int				time_to_die;
 	int				time_to_eat;
@@ -34,26 +35,35 @@ typedef struct s_glob {
 	int				dead;
 }	t_glob;
 
-typedef struct s_philo {
+typedef struct s_philo
+{
 	int				id;
 	int				status;
 	int				eaten_time;
 	u_int64_t		time_to_die;
 	pthread_t		routine;
 	pthread_t		supervisor;
-	pthread_mutex_t *left_fork;
-	pthread_mutex_t *right_fork;
+	pthread_mutex_t	*left_fork;
+	pthread_mutex_t	*right_fork;
 	pthread_mutex_t	lock;
 	struct s_glob	*glob;
 }	t_philo;
 
-void	ft_putstr(int fd, char *str);
-int		ft_atoi(char *str);
-void	error_exit(t_glob *glob);
-void	clear_data(t_glob *glob);
+void		ft_putstr(int fd, char *str);
+int			ft_atoi(char *str);
+void		error_exit(t_glob *glob);
+void		clear_data(t_glob *glob);
+void		print_message(t_philo *philo, char *message, int dead);
 
-t_glob	*init_glob(char **argv, int argc);
+u_int64_t	get_time(t_glob *glob);
+int			ft_usleep(useconds_t time, t_glob *glob);
 
-int		ft_handle_errors(int argc, char **argv);
+t_glob		*init_glob(char **argv, int argc);
+
+int			ft_handle_errors(int argc, char **argv);
+
+void		*monitor(void *glob_pointer);
+void		*supervisor(void *philo_pointer);
+void		*routine(void *philo_pointer);
 
 #endif

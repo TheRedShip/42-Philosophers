@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ycontre <ycontre@student.42.fr>            +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/15 14:19:19 by ycontre           #+#    #+#             */
-/*   Updated: 2023/12/22 12:30:58 by ycontre          ###   ########.fr       */
+/*   Updated: 2024/01/05 19:04:52 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../philo.h"
 
-void ft_putstr(int fd, char *str)
+void	ft_putstr(int fd, char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])
@@ -49,18 +49,17 @@ int	ft_atoi(char *str)
 	return (final_result * sign);
 }
 
-void clear_data(t_glob *glob)
+void	clear_data(t_glob *glob)
 {
 	int	i;
 
 	i = -1;
 	while (++i < glob->philo_num)
 	{
-		// pthread_mutex_destroy(&(glob->forks[i]));
-		// pthread_mutex_destroy(&(glob->philo[i].lock));
+		pthread_mutex_destroy(&(glob->forks[i]));
+		pthread_mutex_destroy(&(glob->philo[i].lock));
 	}
-	// pthread_mutex_destroy(&(glob->lock));
-
+	pthread_mutex_destroy(&(glob->lock));
 	if (glob && glob->philo)
 		free(glob->philo);
 	if (glob && glob->forks)
@@ -69,10 +68,21 @@ void clear_data(t_glob *glob)
 		free(glob);
 }
 
-void error_exit(t_glob *glob)
+void	error_exit(t_glob *glob)
 {
-	pthread_mutex_lock(&(glob->lock)); 
+	pthread_mutex_lock(&(glob->lock));
 	clear_data(glob);
 	ft_putstr(2, "An error happenned.\n");
 	exit(EXIT_FAILURE);
+}
+
+void	print_message(t_philo *p, char *message, int dead)
+{
+	pthread_mutex_lock(&(p->glob->lock));
+	if (p->glob->dead == 0)
+		printf("%ld %d %s\n", get_time(p->glob) - p->glob->start_time, \
+			p->id, message);
+	if (dead == 1)
+		p->glob->dead = 1;
+	pthread_mutex_unlock(&(p->glob->lock));
 }
