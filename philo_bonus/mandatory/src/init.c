@@ -77,7 +77,7 @@ void	init_philos(t_glob *glob)
 		glob->pids[i] = born_philo(philo);
 		if (glob->pids[i] == -1)
 			error_exit(glob);
-		ft_usleep(1);
+		usleep(2);
 		i++;
 	}
 }

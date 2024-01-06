@@ -19,7 +19,7 @@ NAME		=	philo
 
 CC			=	cc
 
-CFLAGS		=	-g -pthread -Wall -Wextra -Werror
+CFLAGS		=	-pthread -Wall -Wextra -Werror
 
 INCLUDE		=	-I.
 
